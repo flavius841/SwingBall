@@ -39,7 +39,7 @@ public class ChangePivot : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.Space))
         {
             HingeJoint2D MyJoint = GetComponent<HingeJoint2D>();
-            MyJoint.connectedBody = null;
+            MyJoint.enabled = false;
             lineRenderer.enabled = false;
             SpacePressed = false;
             currentTarget = null;
@@ -51,7 +51,6 @@ public class ChangePivot : MonoBehaviour
             DrawRopeProcedural(currentTarget.position, 1f);
         }
     }
-
 
     void CheckDistance()
     {
@@ -97,6 +96,7 @@ public class ChangePivot : MonoBehaviour
         }
 
         HingeJoint2D MyJoint = GetComponent<HingeJoint2D>();
+        MyJoint.enabled = true;
         MyJoint.connectedBody = currentTarget.GetComponent<Rigidbody2D>();
         isAnimating = false;
     }
