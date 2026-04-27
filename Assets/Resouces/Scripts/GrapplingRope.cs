@@ -61,7 +61,9 @@ public class GrapplingRope : MonoBehaviour
     {
         if (!strightLine)
         {
-            if (m_lineRenderer.GetPosition(percision - 1).x == grapplingGun.grapplePoint.x)
+            float currentProgression = ropeProgressionCurve.Evaluate(moveTime) * ropeProgressionSpeed;
+
+            if (currentProgression >= 0.99f)
             {
                 strightLine = true;
             }
@@ -77,6 +79,7 @@ public class GrapplingRope : MonoBehaviour
                 grapplingGun.Grapple();
                 isGrappling = true;
             }
+
             if (waveSize > 0)
             {
                 waveSize -= Time.deltaTime * straightenLineSpeed;
