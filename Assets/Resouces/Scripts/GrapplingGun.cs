@@ -1,4 +1,7 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class GrapplingGun : MonoBehaviour
 {
@@ -29,6 +32,7 @@ public class GrapplingGun : MonoBehaviour
     [SerializeField] private bool hasMaxDistance = false;
     [SerializeField] private float maxDistnace = 20;
 
+
     private enum LaunchType
     {
         Transform_Launch,
@@ -48,20 +52,35 @@ public class GrapplingGun : MonoBehaviour
     [HideInInspector] public Vector2 grapplePoint;
     [HideInInspector] public Vector2 grappleDistanceVector;
 
+    [Header("Auto-Targeting:")]
+    public List<Transform> Pivots;
+    private Transform currentTarget;
+
     private void Start()
     {
         grappleRope.enabled = false;
         m_springJoint2D.enabled = false;
 
+        GameObject[] FoundPivots = GameObject.FindGameObjectsWithTag("Pivot");
+        Pivots.AddRange(FoundPivots.Select(go => go.transform));
+
+
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            SetGrapplePoint();
+            currentTarget = GetClosestPivot();
+
+            if (currentTarget != null)
+            {
+                grapplePoint = currentTarget.position;
+                grappleDistanceVector = grapplePoint - (Vector2)gunPivot.position;
+                grappleRope.enabled = true;
+            }
         }
-        else if (Input.GetKey(KeyCode.Mouse0))
+        else if (Input.GetKey(KeyCode.Space))
         {
             if (grappleRope.enabled)
             {
@@ -73,7 +92,7 @@ public class GrapplingGun : MonoBehaviour
                 RotateGun(mousePos, true);
             }
 
-            if (launchToPoint && grappleRope.isGrappling)
+            if (launchToPoint && grappleRope.isGrappling && currentTarget != null)
             {
                 if (launchType == LaunchType.Transform_Launch)
                 {
@@ -83,12 +102,14 @@ public class GrapplingGun : MonoBehaviour
                 }
             }
         }
-        else if (Input.GetKeyUp(KeyCode.Mouse0))
+        else if (Input.GetKeyUp(KeyCode.Space))
         {
             grappleRope.enabled = false;
             m_springJoint2D.enabled = false;
             m_rigidbody.gravityScale = 1;
+            currentTarget = null;
         }
+
         else
         {
             Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
@@ -176,6 +197,24 @@ public class GrapplingGun : MonoBehaviour
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(firePoint.position, maxDistnace);
         }
+    }
+
+    Transform GetClosestPivot()
+    {
+        Transform closest = null;
+        float minDistance = Mathf.Infinity;
+
+        for (int i = 0; i < Pivots.Count; i++)
+        {
+            float distance = Vector2.Distance(firePoint.position, Pivots[i].position);
+
+            if (distance < minDistance && (!hasMaxDistance || distance <= maxDistnace))
+            {
+                minDistance = distance;
+                closest = Pivots[i];
+            }
+        }
+        return closest;
     }
 
 }
