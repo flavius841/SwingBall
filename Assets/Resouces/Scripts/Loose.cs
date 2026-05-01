@@ -5,21 +5,11 @@ public class Loose : MonoBehaviour
 {
     [SerializeField] CinemachineCamera vCam;
 
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
-
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Limit"))
         {
-            transform.position = new Vector3(0, 9, 0);
+            transform.position = new Vector3(0, 14, 0);
             vCam.Target.TrackingTarget = transform;
         }
     }
