@@ -7,6 +7,13 @@
       "dependencies": {},
       "hash": "5ac210a9a287428cb876ce9ea4ef14fe31e115b7"
     },
+    "com.kyrylokuzyk.primetween": {
+      "version": "1.4.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://registry.npmjs.org"
+    },
     "com.unity.2d.animation": {
       "version": "11.0.0",
       "depth": 0,
