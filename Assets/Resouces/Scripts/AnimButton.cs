@@ -1,8 +1,7 @@
 using UnityEngine;
 using PrimeTween;
 using TMPro;
-
-public class Animation : MonoBehaviour
+public class AnimButton : MonoBehaviour
 {
     public bool pressed;
     public bool selected;
@@ -34,7 +33,12 @@ public class Animation : MonoBehaviour
 
         if (selected)
         {
-            Tween.Scale(transform, 1.4f, 0.5f);
+            Vector3 targetScale = new Vector3(1.4f, 1.4f, 1.4f);
+
+            if (transform.localScale != targetScale)
+            {
+                Tween.Scale(transform, targetScale, 0.5f);
+            }
         }
     }
 

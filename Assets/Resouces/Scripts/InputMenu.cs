@@ -1,16 +1,61 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InputMenu : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] int index;
+    [SerializeField] AudioSource PressedSound;
+    [SerializeField] AudioSource SelectedSound;
     void Start()
     {
-        
+
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+        {
+            index--;
+            Bump();
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+        {
+            index++;
+            Bump();
+        }
+
+        else if (Input.GetKeyDown(KeyCode.Return))
+        {
+            SelectedSound.Play();
+            transform.GetChild(index).GetComponent<AnimButton>().selected = true;
+            Invoke("LoadScene", 0.5f);
+        }
+    }
+
+    void Bump()
+    {
+        PressedSound.Play();
+
+        if (index >= transform.childCount)
+        {
+            index = 0;
+        }
+
+        else if (index < 0)
+        {
+            index = transform.childCount - 1;
+        }
+
+        foreach (Transform child in transform)
+        {
+            child.GetComponent<AnimButton>().pressed = false;
+        }
+        transform.GetChild(index).GetComponent<AnimButton>().StopAnimation = false;
+        transform.GetChild(index).GetComponent<AnimButton>().pressed = true;
+    }
+
+    void LoadScene()
+    {
+        SceneManager.LoadScene("Story");
     }
 }
