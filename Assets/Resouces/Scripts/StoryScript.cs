@@ -1,16 +1,20 @@
 using UnityEngine;
-
+using System.Threading.Tasks;
+using PrimeTween;
 public class StoryScript : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] SpriteRenderer Villain;
+    [SerializeField] Vector3 targetPosition;
+    [SerializeField] Transform VillainTextBox;
+
+    async void Start()
     {
-        
+        await PlaySequence();
     }
 
-    // Update is called once per frame
-    void Update()
+    async Task PlaySequence()
     {
-        
+        await Tween.Alpha(Villain, startValue: 0f, endValue: 1f, duration: 2f);
+        await Tween.Position(VillainTextBox, targetPosition, duration: 0.5f, ease: Ease.InOutQuad);
     }
 }
