@@ -7,13 +7,16 @@ using System.Collections;
 public class StoryScript : MonoBehaviour
 {
     [SerializeField] SpriteRenderer Villain;
-    [SerializeField] Vector3 targetPosition;
+    [SerializeField] GameObject Hero;
+    [SerializeField] Vector3 VTBtargetPosition;
+    [SerializeField] Vector3 HeroTargetPosition;
     [SerializeField] Vector3 targetScale;
     [SerializeField] Transform VillainTextBox;
     [SerializeField] TextMeshPro textDisplayVillain;
     [SerializeField] TextMeshPro textDisplayHero;
     [SerializeField] float typingSpeed = 0.05f;
     private bool isTyping = false;
+    [SerializeField] bool StartLoop;
 
     private string Part1 = "Finally my plan is complete! The world will be mine!";
     private string Part2 = "I don't think so!";
@@ -25,17 +28,39 @@ public class StoryScript : MonoBehaviour
     void Start()
     {
         PlayStory();
+
     }
 
     void PlayStory()
     {
+        float textDuration = Part1.Length * 0.05f + 1f;
+        Vector3 originalScale = VillainTextBox.localScale;
+        Vector3 originalPosition = VillainTextBox.position;
+
         Sequence.Create()
             .Chain(Tween.Alpha(Villain, startValue: 0f, endValue: 1f, duration: 2f))
 
-            .Chain(Tween.Position(VillainTextBox, targetPosition, duration: 0.5f, ease: Ease.InOutQuad))
+            .Chain(Tween.Position(VillainTextBox, VTBtargetPosition, duration: 0.5f, ease: Ease.InOutQuad))
             .Group(Tween.Scale(VillainTextBox, targetScale, duration: 0.5f, ease: Ease.InOutQuad))
-            .ChainCallback(() => StartCoroutine(TypeText(Part1, textDisplayVillain)));
 
+            .ChainCallback(() => StartCoroutine(TypeText(Part1, textDisplayVillain)))
+            .ChainDelay(textDuration)
+
+            .Chain(Tween.Position(Hero.transform, HeroTargetPosition, duration: 1f, ease: Ease.InOutQuad))
+
+            .ChainCallback(() =>
+             {
+                 Tween.Position(
+                     Hero.transform,
+                     HeroTargetPosition - new Vector3(0.3f, 0.3f, 0),
+                     duration: 1f,
+                     ease: Ease.InOutQuad,
+                     cycles: -1,
+                     cycleMode: CycleMode.Yoyo
+                 );
+             })
+            .Group(Tween.Position(VillainTextBox, originalPosition, duration: 0.5f, ease: Ease.InOutQuad))
+            .Group(Tween.Scale(VillainTextBox, originalScale, duration: 0.5f, ease: Ease.InOutQuad));
 
 
         // .Chain(for (int i = 0; i < ; i++)
