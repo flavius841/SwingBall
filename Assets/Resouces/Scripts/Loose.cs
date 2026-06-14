@@ -9,7 +9,7 @@ public class Loose : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Limit"))
         {
-            transform.position = new Vector3(0, 14, 0);
+            transform.position = new Vector3(0, 24, 0);
             vCam.Target.TrackingTarget = transform;
         }
     }

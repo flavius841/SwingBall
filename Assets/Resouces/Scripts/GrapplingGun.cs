@@ -114,7 +114,15 @@ public class GrapplingGun : MonoBehaviour
         {
             Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
             currentTarget = GetClosestPivot();
-            RotateGun(currentTarget.position, true);
+
+            if (currentTarget != null)
+            {
+                RotateGun(currentTarget.position, true);
+            }
+            else
+            {
+                RotateGun(mousePos, true);
+            }
         }
     }
 

@@ -3,6 +3,7 @@ using PrimeTween;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class StoryScript : MonoBehaviour
 {
@@ -66,6 +67,11 @@ public class StoryScript : MonoBehaviour
             MonologueActive = true;
             StartMonologue = false;
         }
+
+        if (StoryDone)
+        {
+            Invoke("LoadNextScene", 0.5f);
+        }
     }
 
     void PlayStory()
@@ -117,13 +123,16 @@ public class StoryScript : MonoBehaviour
 
     IEnumerator TypeText(string fullText, TextMeshPro textDisplay)
     {
-        textDisplay.text = "";
+        textDisplay.text = fullText;
+        textDisplay.maxVisibleCharacters = 0;
+        textDisplay.ForceMeshUpdate();
+        int totalCharacters = textDisplay.textInfo.characterCount;
 
-        foreach (char letter in fullText.ToCharArray())
+
+        for (int i = 0; i <= totalCharacters; i++)
         {
-            textDisplay.text += letter;
+            textDisplay.maxVisibleCharacters = i;
             yield return new WaitForSeconds(typingSpeed);
-            isTyping = true;
         }
 
         isTyping = false;
@@ -141,5 +150,10 @@ public class StoryScript : MonoBehaviour
         {
             StoryDone = true;
         }
+    }
+
+    void LoadNextScene()
+    {
+        SceneManager.LoadScene(2);
     }
 }
