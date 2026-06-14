@@ -1540,7 +1540,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: N E W    A D V E N T U R E
+  m_text: N E W    G A M E
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7ddaddb06941bfad6a3f80195d0fcb7d, type: 2}
   m_sharedMaterial: {fileID: 2038524708042661905, guid: 7ddaddb06941bfad6a3f80195d0fcb7d, type: 2}

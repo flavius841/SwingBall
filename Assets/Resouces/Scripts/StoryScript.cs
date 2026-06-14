@@ -19,6 +19,11 @@ public class StoryScript : MonoBehaviour
     [SerializeField] float typingSpeed = 0.05f;
     private bool isTyping = false;
     [SerializeField] bool StartMonologue;
+    [SerializeField] GameObject NextButton;
+    [SerializeField] int currentIndex;
+    [SerializeField] bool StoryDone;
+    [SerializeField] bool MonologueActive;
+
 
     private string Part1 = "Finally my plan is complete! The world will be mine!";
     private string Part2 = "I don't think so!";
@@ -27,17 +32,39 @@ public class StoryScript : MonoBehaviour
     private string Part5 = "My plan is unstoppable!";
     private string Part6 = "The only way to stop me is to destroy my secret weapon!";
 
+    private List<string> MonologueParts = new List<string>();
+
+    void Awake()
+    {
+        MonologueParts.Add(Part3);
+        MonologueParts.Add(Part4);
+        MonologueParts.Add(Part5);
+        MonologueParts.Add(Part6);
+    }
+
     void Start()
     {
         PlayStory();
-
     }
 
     void Update()
     {
+        if (isTyping)
+        {
+            NextButton.SetActive(false);
+        }
+
+        else if (MonologueActive)
+        {
+            NextButton.SetActive(true);
+        }
+
         if (StartMonologue)
         {
-
+            StartCoroutine(TypeText(Part3, textDisplayVillain));
+            NextButton.SetActive(true);
+            MonologueActive = true;
+            StartMonologue = false;
         }
     }
 
@@ -78,6 +105,7 @@ public class StoryScript : MonoBehaviour
 
             .ChainCallback(() => StartCoroutine(TypeText(Part2, textDisplayHero)))
             .ChainDelay(textDuration2)
+            .ChainCallback(() => textDisplayVillain.text = "")
 
             .Chain(Tween.Position(VillainTextBox, VTBtargetPosition, duration: 0.5f, ease: Ease.InOutQuad))
             .Group(Tween.Scale(VillainTextBox, targetScale, duration: 0.5f, ease: Ease.InOutQuad))
@@ -85,12 +113,6 @@ public class StoryScript : MonoBehaviour
             .Group(Tween.Scale(HeroTextBox, 0, duration: 0.5f, ease: Ease.InOutQuad))
 
             .ChainCallback(() => StartMonologue = true);
-
-        // .Chain(for (int i = 0; i < ; i++)
-        // {
-        //     textDisplayVillain.text += Part1[i];
-        //     yield return new WaitForSeconds(typingSpeed);
-        // })
     }
 
     IEnumerator TypeText(string fullText, TextMeshPro textDisplay)
@@ -105,5 +127,19 @@ public class StoryScript : MonoBehaviour
         }
 
         isTyping = false;
+    }
+
+    public void NextButtonFunc()
+    {
+        if (currentIndex < MonologueParts.Count - 1 && !isTyping)
+        {
+            currentIndex++;
+            StartCoroutine(TypeText(MonologueParts[currentIndex], textDisplayVillain));
+        }
+
+        else if (currentIndex == MonologueParts.Count - 1 && !isTyping)
+        {
+            StoryDone = true;
+        }
     }
 }
