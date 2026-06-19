@@ -21,4 +21,11 @@ public class Loose : MonoBehaviour
             vCam.Target.TrackingTarget = null;
         }
     }
+
+    void Update()
+    {
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+
+        Debug.Log("Velocity: " + rb.linearVelocity.x);
+    }
 }
