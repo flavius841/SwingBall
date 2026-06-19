@@ -4,7 +4,6 @@ using Unity.Cinemachine;
 public class Loose : MonoBehaviour
 {
     [SerializeField] CinemachineCamera vCam;
-    public Rigidbody2D rb;
 
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -22,14 +21,4 @@ public class Loose : MonoBehaviour
             vCam.Target.TrackingTarget = null;
         }
     }
-
-    void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
-
-    // void Update()
-    // {
-    //     Debug.Log("Velocity: " + rb.linearVelocity.x);
-    // }
 }
