@@ -33,4 +33,18 @@ public class Trampoline : MonoBehaviour
             Debug.Log(preCollisionRelativeVelocity+"precolisionvelocity");
         }
     }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            if (rb.linearVelocity.magnitude < 0.1f)
+            {
+                Debug.Log("Object is stuck on the trampoline. Applying force to launch it.");
+                collision.gameObject.transform.position += new Vector3(2f, 0f, 0);
+                rb.linearVelocity = Vector2.right * launchForce;
+            }
+        }
+    }
 }
