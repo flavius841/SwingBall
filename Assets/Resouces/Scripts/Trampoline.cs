@@ -7,7 +7,6 @@ public class Trampoline : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Check if the object colliding has a Rigidbody2D (like the player)
         Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
         Vector2 preCollisionRelativeVelocity = collision.relativeVelocity;
         Vector2 surfaceNormal = collision.GetContact(0).normal;
@@ -15,17 +14,23 @@ public class Trampoline : MonoBehaviour
 
         if (rb != null)
         {
-            Debug.Log(surfaceNormal);
+            float parentZRotation = transform.parent.eulerAngles.z;
             
-            // Optional: Check if the player is actually falling down onto it
-            if (rb.linearVelocity.y <= 0.1f)
+            if (Mathf.Approximately(parentZRotation, 0f) || Mathf.Approximately(parentZRotation, 360f))
             {
-                // Reset the vertical velocity so the launch force is always consistent
                 rb.linearVelocity = new Vector2(preCollisionRelativeVelocity.x, 0f);
-
-                // Apply the upward force
-                rb.AddForce(-surfaceNormal * launchForce, ForceMode2D.Impulse);
+                
             }
+
+            else
+            {
+                rb.linearVelocity = new Vector2(0f, preCollisionRelativeVelocity.y);
+                Debug.Log(surfaceNormal+ "surfacenormal");
+            }
+
+            rb.AddForce(-surfaceNormal * launchForce, ForceMode2D.Impulse);
+
+            Debug.Log(preCollisionRelativeVelocity+"precolisionvelocity");
         }
     }
 }
