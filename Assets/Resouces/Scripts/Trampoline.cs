@@ -3,10 +3,14 @@ using UnityEngine;
 public class Trampoline : MonoBehaviour
 {
     [SerializeField] private float launchForce = 15f;
+    [SerializeField] AudioSource bounceSound;
 
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+
+        bounceSound.Play();
+        
         Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
         Vector2 preCollisionRelativeVelocity = collision.relativeVelocity;
         Vector2 surfaceNormal = collision.GetContact(0).normal;

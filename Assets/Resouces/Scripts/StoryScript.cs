@@ -18,12 +18,13 @@ public class StoryScript : MonoBehaviour
     [SerializeField] TextMeshPro textDisplayVillain;
     [SerializeField] TextMeshPro textDisplayHero;
     [SerializeField] float typingSpeed = 0.05f;
-    private bool isTyping = false;
+    [SerializeField] bool isTyping = false;
     [SerializeField] bool StartMonologue;
     [SerializeField] GameObject NextButton;
     [SerializeField] int currentIndex;
     [SerializeField] bool StoryDone;
     [SerializeField] bool MonologueActive;
+    [SerializeField] AudioSource VillainVoice;
 
 
     private string Part1 = "Finally my plan is complete! The world will be mine!";
@@ -63,7 +64,6 @@ public class StoryScript : MonoBehaviour
         if (StartMonologue)
         {
             StartCoroutine(TypeText(Part3, textDisplayVillain));
-            NextButton.SetActive(true);
             MonologueActive = true;
             StartMonologue = false;
         }
@@ -87,11 +87,16 @@ public class StoryScript : MonoBehaviour
             .Chain(Tween.Position(VillainTextBox, VTBtargetPosition, duration: 0.5f, ease: Ease.InOutQuad))
             .Group(Tween.Scale(VillainTextBox, targetScale, duration: 0.5f, ease: Ease.InOutQuad))
 
+            .ChainCallback(() => VillainVoice.Play())
+
             .ChainCallback(() => StartCoroutine(TypeText(Part1, textDisplayVillain)))
             .ChainDelay(textDuration1)
 
-            .Chain(Tween.Position(Hero.transform, HeroTargetPosition, duration: 1f, ease: Ease.InOutQuad))
+            
 
+            .Chain(Tween.Position(Hero.transform, HeroTargetPosition, duration: 1f, ease: Ease.InOutQuad))
+            .ChainCallback(() => VillainVoice.Stop())
+            
             .ChainCallback(() =>
              {
                  Tween.Position(
@@ -105,6 +110,7 @@ public class StoryScript : MonoBehaviour
              })
             .Group(Tween.Position(VillainTextBox, originalPositionVTB, duration: 0.5f, ease: Ease.InOutQuad))
             .Group(Tween.Scale(VillainTextBox, 0, duration: 0.5f, ease: Ease.InOutQuad))
+
 
             .Chain(Tween.Position(HeroTextBox, HTBtargetPosition, duration: 0.5f, ease: Ease.InOutQuad))
             .Group(Tween.Scale(HeroTextBox, targetScale, duration: 0.5f, ease: Ease.InOutQuad))
@@ -131,11 +137,13 @@ public class StoryScript : MonoBehaviour
 
         for (int i = 0; i <= totalCharacters; i++)
         {
+            isTyping = true;
             textDisplay.maxVisibleCharacters = i;
             yield return new WaitForSeconds(typingSpeed);
         }
 
         isTyping = false;
+
     }
 
     public void NextButtonFunc()
