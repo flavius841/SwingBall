@@ -25,6 +25,7 @@ public class StoryScript : MonoBehaviour
     [SerializeField] bool StoryDone;
     [SerializeField] bool MonologueActive;
     [SerializeField] AudioSource VillainVoice;
+    [SerializeField] AudioSource HeroVoice;
 
 
     private string Part1 = "Finally my plan is complete! The world will be mine!";
@@ -51,14 +52,24 @@ public class StoryScript : MonoBehaviour
 
     void Update()
     {
-        if (isTyping)
+        if (isTyping && MonologueActive)
         {
             NextButton.SetActive(false);
+
+            if (!VillainVoice.isPlaying) 
+            {
+                VillainVoice.Play();
+            }
         }
 
         else if (MonologueActive)
         {
             NextButton.SetActive(true);
+
+            if (VillainVoice.isPlaying) 
+            {
+                VillainVoice.Stop();
+            }
         }
 
         if (StartMonologue)
@@ -115,9 +126,13 @@ public class StoryScript : MonoBehaviour
             .Chain(Tween.Position(HeroTextBox, HTBtargetPosition, duration: 0.5f, ease: Ease.InOutQuad))
             .Group(Tween.Scale(HeroTextBox, targetScale, duration: 0.5f, ease: Ease.InOutQuad))
 
+            .ChainCallback(() => HeroVoice.Play())
+
             .ChainCallback(() => StartCoroutine(TypeText(Part2, textDisplayHero)))
             .ChainDelay(textDuration2)
             .ChainCallback(() => textDisplayVillain.text = "")
+
+            .ChainCallback(() => HeroVoice.Stop())
 
             .Chain(Tween.Position(VillainTextBox, VTBtargetPosition, duration: 0.5f, ease: Ease.InOutQuad))
             .Group(Tween.Scale(VillainTextBox, targetScale, duration: 0.5f, ease: Ease.InOutQuad))
