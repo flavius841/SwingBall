@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.Cinemachine;
+using UnityEngine.SceneManagement;
 
 
 public class WinScript : MonoBehaviour
@@ -22,7 +23,15 @@ public class WinScript : MonoBehaviour
     {
         if (Attract)
         {
-            transform.position = Vector3.MoveTowards(transform.position, winPosition.position + Vector3.right * 2, 5 * Time.deltaTime);
+            transform.position = Vector3.MoveTowards 
+             (transform.position, winPosition.position + Vector3.right * 2, 5 * Time.deltaTime);
+
+            Invoke("LoadNextScene", 5f);
         }
+    }
+
+    void LoadNextScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

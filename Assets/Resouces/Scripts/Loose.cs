@@ -4,12 +4,13 @@ using Unity.Cinemachine;
 public class Loose : MonoBehaviour
 {
     [SerializeField] CinemachineCamera vCam;
+    [SerializeField] Transform SpawnPoint;
 
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Limit"))
         {
-            transform.position = new Vector3(0, 24, 0);
+            transform.position = SpawnPoint.position;
             vCam.Target.TrackingTarget = transform;
         }
     }
