@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ContinuousMusic : MonoBehaviour
 {
@@ -8,7 +9,8 @@ public class ContinuousMusic : MonoBehaviour
     void Awake()
     {
         // 1. Check if an instance of this object already exists in the game
-        if (instance != null && instance != this)
+        if (instance != null && instance != this || (SceneManager.GetActiveScene().buildIndex != 2
+         && SceneManager.GetActiveScene().buildIndex != 3))
         {
             // If it does, destroy this new duplicate immediately!
             Destroy(this.gameObject);
