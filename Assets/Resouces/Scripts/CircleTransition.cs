@@ -5,10 +5,22 @@ public class CircleTransition : MonoBehaviour
 {
     public Material transitionMaterial;
     public float transitionSpeed = 1.0f;
+    public WinScript winScript;
+    [SerializeField] bool isTransitioning = false;
 
     void Start()
     {
-        transitionMaterial.SetFloat("_Radius", 1.5f);
+        transitionMaterial.SetFloat("_Radius", 0f);
+        OpenScreen();
+    }
+
+    void Update()
+    {
+        if (winScript.Attract && !isTransitioning)
+        {
+            isTransitioning = true;
+            Invoke("CloseScreen", 3f);
+        }
     }
 
     public void CloseScreen()

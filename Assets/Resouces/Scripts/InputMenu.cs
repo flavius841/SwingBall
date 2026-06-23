@@ -6,6 +6,7 @@ public class InputMenu : MonoBehaviour
     [SerializeField] int index;
     [SerializeField] AudioSource PressedSound;
     [SerializeField] AudioSource SelectedSound;
+    [SerializeField] GameObject Text;
     void Start()
     {
 
@@ -28,7 +29,21 @@ public class InputMenu : MonoBehaviour
         {
             SelectedSound.Play();
             transform.GetChild(index).GetComponent<AnimButton>().selected = true;
-            Invoke("LoadScene", 0.5f);
+
+            if (index == 0)
+            {
+                Invoke("LoadScene", 0.5f);
+            }
+            else if (index == 1)
+            {
+                ShowText();
+                Invoke("RestartGame", 2f);
+            }
+
+            else if (index == 2)
+            {
+                Invoke("Application.Quit", 1f);
+            }
         }
     }
 
@@ -57,5 +72,15 @@ public class InputMenu : MonoBehaviour
     void LoadScene()
     {
         SceneManager.LoadScene("Story");
+    }
+
+    void ShowText()
+    {
+        Text.SetActive(true);
+    }
+
+    void RestartGame()
+    {
+        SceneManager.LoadScene(0);
     }
 }

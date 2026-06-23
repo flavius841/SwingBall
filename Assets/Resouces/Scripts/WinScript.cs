@@ -8,7 +8,7 @@ public class WinScript : MonoBehaviour
 
     [SerializeField] Transform vCam;
     [SerializeField] Transform winPosition;
-    [SerializeField] bool Attract;
+    public bool Attract;
 
     void OnTriggerEnter2D(Collider2D collider)
     {
@@ -26,12 +26,27 @@ public class WinScript : MonoBehaviour
             transform.position = Vector3.MoveTowards 
              (transform.position, winPosition.position + Vector3.right * 2, 5 * Time.deltaTime);
 
-            Invoke("LoadNextScene", 7f);
+            if (SceneManager.GetActiveScene().buildIndex == 3)
+            {
+                Invoke("LoadNextScene", 4f);
+            }
+            else
+            {
+                Invoke("LoadNextScene", 7f);
+            }
         }
     }
 
     void LoadNextScene()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        if (SceneManager.GetActiveScene().buildIndex == 3)
+        {
+            SceneManager.LoadScene(0);
+        }
+
+        else
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
     }
 }
