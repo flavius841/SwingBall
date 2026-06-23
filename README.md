@@ -2,7 +2,7 @@
 
 ---
 
-**Swingball**  is a car video game built using the **Unity Engine**.
+**Swingball**  is a video game built using the **Unity Engine**.
 
 ---
 
