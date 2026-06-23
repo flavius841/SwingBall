@@ -26,7 +26,7 @@ public class WinScript : MonoBehaviour
             transform.position = Vector3.MoveTowards 
              (transform.position, winPosition.position + Vector3.right * 2, 5 * Time.deltaTime);
 
-            Invoke("LoadNextScene", 5f);
+            Invoke("LoadNextScene", 7f);
         }
     }
 
