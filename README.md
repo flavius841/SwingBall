@@ -16,7 +16,7 @@ https://flavius123.itch.io/timebot
 2. Open the project using the **Unity Editor**.
 3. Make sure you are using **Unity 6.1 (6000.1.116f1)**.
 
-> **Note:** The project is only compatible with Unity version **6.2 (6000.1.11f1)**.
+> **Note:** The project is only compatible with Unity version **6.1 (6000.1.11f1)**.
 
 ---
 
